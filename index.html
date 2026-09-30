@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nodora</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23243028' width='32' height='32' rx='8'/%3E%3Ccircle cx='10' cy='9' r='2.3' fill='%23f6e7c1'/%3E%3Ccircle cx='10' cy='23' r='2.3' fill='%23f0b7a8'/%3E%3Ccircle cx='22' cy='9' r='2.3' fill='%238fd0c4'/%3E%3Ccircle cx='22' cy='23' r='2.3' fill='%23f6e7c1'/%3E%3Cpath d='M10 11.4V20.6M10 11.4L22 20.6M22 11.4V20.6' stroke='%23f4f1ea' stroke-width='1.7' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#243028"/>
+        <circle cx="10" cy="9" r="2.3" fill="#f6e7c1"/>
+        <circle cx="10" cy="23" r="2.3" fill="#f0b7a8"/>
+        <circle cx="22" cy="9" r="2.3" fill="#8fd0c4"/>
+        <circle cx="22" cy="23" r="2.3" fill="#f6e7c1"/>
+        <path d="M10 11.4 V20.6 M10 11.4 L22 20.6 M22 11.4 V20.6" stroke="#f4f1ea" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">Nodora</span>
+        <input id="map-title" class="map-title" data-i18n-aria="aria.mapTitle" aria-label="Titel der Karte" maxlength="80" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="toolbar" role="toolbar" data-i18n-aria="aria.toolbar" aria-label="Werkzeuge">
+      <button type="button" id="btn-add" class="btn primary" title="Tab" data-i18n="addNode">+ Knoten</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" id="btn-new" class="btn" data-i18n="new">Neu</button>
+      <button type="button" id="btn-open" class="btn" data-i18n="open" data-i18n-title="title.open" title="Strg+O">Öffnen</button>
+      <button type="button" id="btn-save" class="btn" data-i18n="save" data-i18n-title="title.save" title="Strg+S">Speichern</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" id="btn-undo" class="btn icon" data-i18n-title="title.undo" data-i18n-aria="aria.undo" title="Strg+Z" aria-label="Rückgängig" disabled>↶</button>
+      <button type="button" id="btn-redo" class="btn icon" data-i18n-title="title.redo" data-i18n-aria="aria.redo" title="Strg+Y" aria-label="Wiederholen" disabled>↷</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" id="btn-svg" class="btn" data-i18n-title="title.svg" title="Strg+E">SVG</button>
+      <button type="button" id="btn-pdf" class="btn" data-i18n-title="title.pdf" title="Strg+P">PDF</button>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="zoom-group" role="group" data-i18n-aria="aria.zoom" aria-label="Zoom">
+        <button type="button" id="btn-zoom-out" data-i18n-aria="aria.zoomOut" aria-label="Verkleinern">−</button>
+        <button type="button" id="btn-zoom-label" data-i18n-title="title.zoom100" title="Auf 100 %">100%</button>
+        <button type="button" id="btn-zoom-in" data-i18n-aria="aria.zoomIn" aria-label="Vergrößern">+</button>
+        <button type="button" id="btn-fit" data-i18n="fit" data-i18n-title="title.fit" title="Strg+0">Einpassen</button>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" id="btn-notes" class="btn" data-i18n="notes" data-i18n-title="title.notes" title="Strg+N" aria-pressed="false">Notizen</button>
+      <button type="button" id="btn-legend" class="btn" data-i18n="legend" data-i18n-title="title.legend" title="Strg+L">Legende</button>
+    </div>
+
+    <div class="save-state">
+      <div class="lang-picker">
+        <button type="button" id="btn-lang" class="btn icon lang-toggle" data-i18n-title="aria.language" data-i18n-aria="aria.language" title="Sprache" aria-label="Sprache" aria-haspopup="true" aria-expanded="false" aria-controls="lang-switch">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9M12 3c-2.6 2.6-3.9 5.6-3.9 9s1.3 6.4 3.9 9"/></svg>
+        </button>
+        <div id="lang-switch" class="lang-menu" role="radiogroup" data-i18n-aria="aria.language" aria-label="Sprache" hidden></div>
+      </div>
+      <span id="status" role="status" data-i18n="status.ready">Bereit</span>
+      <label class="autosave" data-i18n-title="aria.autosave" title="Speichert den letzten Stand in diesem Browser">
+        <input type="checkbox" id="autosave" checked>
+        <span data-i18n="autosave">Auto-Save</span>
+      </label>
+    </div>
+  </header>
+
+  <div id="workspace" class="workspace">
+    <aside class="inspector" data-i18n-aria="aria.inspector" aria-label="Darstellung">
+      <p id="selection-label" class="selection-label" data-i18n="selection.none">Nichts ausgewählt</p>
+
+      <fieldset id="node-style">
+        <legend data-i18n="color">Farbe</legend>
+        <div id="colors" class="swatches"></div>
+
+        <legend class="legend-gap" data-i18n="font">Schrift</legend>
+        <select id="font-family" class="font-family" data-i18n-aria="aria.fontFamily" aria-label="Schriftart">
+          <option value="sans" data-i18n="font.sans">Modern Sans</option>
+          <option value="serif" data-i18n="font.serif">Classic Serif</option>
+          <option value="mono" data-i18n="font.mono">Monospace</option>
+          <option value="rounded" data-i18n="font.rounded">Rounded</option>
+        </select>
+        <div class="font-row">
+          <input id="font-size" type="range" min="10" max="96" step="1" value="48" data-i18n-aria="aria.fontSize" aria-label="Schriftgröße">
+          <input id="font-size-value" type="number" min="10" max="96" step="1" value="48" data-i18n-aria="aria.fontPx" aria-label="Schriftgröße in Pixel">
+          <span class="font-unit">px</span>
+        </div>
+        <div class="style-row" role="group" data-i18n-aria="aria.style" aria-label="Schriftschnitt">
+          <button type="button" id="btn-bold" class="btn seg" data-i18n-title="title.bold" title="Strg+B" aria-pressed="false"><strong data-i18n="style.boldMark">F</strong></button>
+          <button type="button" id="btn-italic" class="btn seg" data-i18n-title="title.italic" title="Strg+I" aria-pressed="false"><em data-i18n="style.italicMark">K</em></button>
+          <button type="button" id="btn-underline" class="btn seg" data-i18n-title="title.underline" title="Strg+U" aria-pressed="false"><span class="u" data-i18n="style.underlineMark">U</span></button>
+          <button type="button" id="btn-link" class="btn seg" data-i18n-title="title.link" data-i18n-aria="aria.link" title="Strg+K" aria-label="Link hinzufügen">↗</button>
+        </div>
+        <div class="style-row" role="group" data-i18n-aria="aria.lists" aria-label="Listen">
+          <button type="button" id="btn-list-ul" class="btn seg" data-i18n-title="title.listBullet" data-i18n-aria="aria.listBullet" title="Strg+Umschalt+8" aria-label="Aufzählung" aria-pressed="false">•</button>
+          <button type="button" id="btn-list-ol" class="btn seg" data-i18n-title="title.listNumber" data-i18n-aria="aria.listNumber" title="Strg+Umschalt+7" aria-label="Nummerierte Liste" aria-pressed="false">1.</button>
+        </div>
+      </fieldset>
+
+      <section class="link-section">
+        <h2 id="link-heading" data-i18n="link.new">Neue Verbindungen</h2>
+        <p class="hint-copy" data-i18n="link.hint">Die Linienfarbe folgt dem Startknoten.</p>
+        <div class="seg-row" role="group" data-i18n-aria="aria.route" aria-label="Linienführung">
+          <button type="button" class="btn seg" data-route="curve" data-i18n="route.curve" aria-pressed="true">Kurve</button>
+          <button type="button" class="btn seg" data-route="straight" data-i18n="route.straight">Gerade</button>
+          <button type="button" class="btn seg" data-route="elbow" data-i18n="route.elbow">Winkel</button>
+        </div>
+        <div class="seg-row" role="group" data-i18n-aria="aria.dash" aria-label="Strichart">
+          <button type="button" class="btn seg" data-dash="solid" data-i18n="dash.solid" aria-pressed="true">Linie</button>
+          <button type="button" class="btn seg" data-dash="dashed" data-i18n="dash.dashed">Strich</button>
+          <button type="button" class="btn seg" data-dash="dotted" data-i18n="dash.dotted">Punkt</button>
+        </div>
+        <button type="button" id="btn-arrow" class="btn seg wide" data-i18n="link.arrow" aria-pressed="false">Pfeilspitze</button>
+        <div class="inspector-actions">
+          <button type="button" id="btn-connect" class="btn" data-i18n="connect">Verbinden</button>
+          <button type="button" id="btn-delete" class="btn danger" data-i18n="delete" disabled>Löschen</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="stage">
+      <div id="viewport">
+        <div id="world">
+          <svg id="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div id="nodes"></div>
+        </div>
+        <div id="selection-box" hidden></div>
+        <div id="connect-banner" data-i18n="connect.banner" hidden>Zielknoten anklicken · Esc bricht ab</div>
+        <p id="empty" class="empty" data-i18n="empty" hidden>Doppelklick setzt den ersten Knoten.</p>
+        <p class="canvas-hint" data-i18n="canvas.hint">Tab neuer Ast · Rechtsziehen Auswahl · Strg+L Legende</p>
+      </div>
+    </main>
+
+    <aside id="notes" class="notes" data-i18n-aria="aria.notes" aria-label="Notizen" hidden>
+      <header class="notes-head">
+        <div>
+          <h2 data-i18n="notes">Notizen</h2>
+          <p id="notes-heading" data-i18n="notes.none">Kein Knoten gewählt</p>
+        </div>
+        <button type="button" id="btn-notes-close" class="btn icon" data-i18n-aria="aria.notesClose" aria-label="Notizen schließen">×</button>
+      </header>
+      <textarea id="notes-input" data-i18n-placeholder="notes.placeholder" placeholder="Gedanken, Zitate, nächste Schritte…" disabled></textarea>
+      <p class="hint-copy" data-i18n="notes.hint">Notizen bleiben in der Datei erhalten und erscheinen nicht im PDF- oder SVG-Export.</p>
+    </aside>
+  </div>
+
+  <div id="legend" class="overlay" hidden>
+    <div class="legend-card" role="dialog" aria-modal="true" aria-labelledby="legend-title">
+      <header class="legend-head">
+        <div>
+          <h2 id="legend-title" data-i18n="legend.title">Tastenkürzel</h2>
+          <p data-i18n="legend.hint">Strg+L oder Esc schließt diese Legende.</p>
+        </div>
+        <button type="button" id="btn-legend-close" class="btn icon" data-i18n-aria="aria.legendClose" aria-label="Legende schließen">×</button>
+      </header>
+      <div id="legend-body" class="legend-grid"></div>
+    </div>
+  </div>
+
+  <div id="menu" class="menu" role="menu" hidden></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <input id="file-input" type="file" accept="application/json,.json" hidden>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
